@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.nav{
+  margin: 10px;
+  font-size: xxx-large;
+  color: #282c34;
+  background-color: blue;
+}

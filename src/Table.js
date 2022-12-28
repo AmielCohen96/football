@@ -2,9 +2,6 @@ import React from "react";
 import axios from "axios";
 
 
-let team = {name: "", goals: null, points: null}
-let leagues_temp = []
-let teams_temp = []
 
 class Table extends React.Component{
     state = {
@@ -16,7 +13,6 @@ class Table extends React.Component{
         leagueName: 'none',
         leagueId: '',
     }
-    team = {name: "", goals: null, points: null}
     leagues_temp = []
     teams_temp = []
 
@@ -50,10 +46,10 @@ class Table extends React.Component{
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
                 response.data.map((item) => {
-                    leagues_temp.push(item.name)
+                    this.leagues_temp.push(item.name)
                 })
                 this.setState({
-                    leagueData: leagues_temp
+                    leagueData: this.leagues_temp
                 })
             });
     }

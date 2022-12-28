@@ -1,11 +1,16 @@
 import React from "react";
 import axios from "axios";
 
+
+let team = {name: "", goals: null, points: null}
+let leagues_temp = []
+let teams_temp = []
+
 class Table extends React.Component{
     state = {
         team_name: 'none',
         result: 0,
-        teamsData: [{name: "", goals: null, points: null}],
+        teamsData: [],
         teamsName: '',
         leagueData: [],
         leagueName: 'none',
@@ -23,33 +28,32 @@ class Table extends React.Component{
     }
 
 
-    createObject = (x) => {
-        this.team.name = x
-        this.team.points = 15
-        this.team.goals = 23
-        this.teams_temp.push(this.team)
+    createObject = (data) => {
+        let tempArray = [];
+        data.map((item) => {
+            let team = {name: item.name, goals: item.id, points: 15}
+            tempArray.push(team)
+        })
         this.setState({
-            teamsData: this.teams_temp
+            teamsData: tempArray
         })
     }
 
     getTeamData = () => {
         axios.get("https://app.seker.live/fm1/teams/"+1)
             .then((response) => {
-                response.data.map((item) => {
-                    this.createObject(item.name)
-                })
+                this.createObject(response.data)
             });
-    }
+        }
 
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
                 response.data.map((item) => {
-                    this.leagues_temp.push(item.name)
+                    leagues_temp.push(item.name)
                 })
                 this.setState({
-                    leagueData: this.leagues_temp
+                    leagueData: leagues_temp
                 })
             });
     }
@@ -62,7 +66,7 @@ class Table extends React.Component{
 
     render() {
         return(
-            <div className="ChooseLeague">
+            <div className="TB">
                 <br/>
                 <div>
                     {this.state.leagueData}

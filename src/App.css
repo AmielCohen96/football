@@ -43,3 +43,18 @@
   color: #282c34;
   background-color: blue;
 }
+table{
+  margin: auto;
+}
+tr{
+  margin: 50px;
+}
+
+tb{
+  margin: 50px;
+}
+
+td{
+  margin: 50px;
+  border-color: black;
+}

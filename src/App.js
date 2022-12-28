@@ -44,7 +44,7 @@ class App extends React.Component {
                     <NavLink style={navLinkStyle} to={"/"} className={"nav"}>Home</NavLink>
                     <NavLink style={navLinkStyle} to={"/Table"} className={"nav"}>Table</NavLink>
                     <NavLink style={navLinkStyle} to={"/Stats"} className={"nav"}>Stats</NavLink>
-                    <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>MostGoals</NavLink>
+                    <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>Most Goals</NavLink>
                     <NavLink style={navLinkStyle} to={"/History"} className={"nav"}>History</NavLink>
                     <Routes>
                         <Route path={"/"} element={<HomePage />}/>

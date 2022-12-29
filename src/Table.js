@@ -6,12 +6,14 @@ import axios from "axios";
 class Table extends React.Component{
     state = {
         team_name: 'none',
+        teamId: 60,
         result: 0,
         teamsData: [],
         teamsName: '',
         leagueData: [],
         leagueName: 'none',
         leagueId: '',
+        goalsCounter: 0
     }
     leagues_temp = []
     teams_temp = []
@@ -23,15 +25,43 @@ class Table extends React.Component{
         })
     }
 
+    goalsCount = (tId) => {
+        let goal_counter = 0
+        let home_away = false
+        axios.get("https://app.seker.live/fm1/history/1/"+tId)
+            .then((response) => {
+                response.data.map((item) => {
+                    if(item.homeTeam.id === tId){
+                        home_away = true
+                    }
+                    else {
+                        home_away = false
+                    }
+                    item.goals.map((goal) => {
+                        if(goal.home === home_away){
+                            goal_counter = goal_counter + 1
+                        }
+                        else {
+                            goal_counter = goal_counter - 1
+                        }
+                    })
+                })
+            });
+        this.setState({
+            goals_counter: goal_counter
+        })
+    }
 
     createObject = (data) => {
         let tempArray = [];
         data.map((item) => {
-            let team = {name: item.name, goals: item.id, points: 15}
+            this.goalsCount(this.state.teamId);
+            let team = {name: item.name, goals: this.state.goalsCounter, points: 15}
             tempArray.push(team)
         })
         this.setState({
-            teamsData: tempArray
+            teamsData: tempArray,
+            goalsCounter: 0
         })
     }
 
@@ -58,15 +88,13 @@ class Table extends React.Component{
     componentDidMount() {
         this.getLeagueData();
         this.getTeamData();
+
     }
 
     render() {
         return(
             <div className="TB">
                 <br/>
-                <div>
-                    {this.state.leagueData}
-                </div>
                 <br/>
                 <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
                     <option value={"none"} disabled={true}>SELECT LEAGUE</option>

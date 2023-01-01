@@ -13,7 +13,7 @@ class Table extends React.Component{
         leagueData: [],
         leagueName: 'none',
         leagueId: '',
-        goalsCounter: 0
+        goalsCounter:0
     }
     leagues_temp = []
     teams_temp = []
@@ -26,42 +26,48 @@ class Table extends React.Component{
     }
 
     goalsCount = (tId) => {
-        let goal_counter = 0
-        let home_away = false
-        axios.get("https://app.seker.live/fm1/history/1/"+tId)
-            .then((response) => {
-                response.data.map((item) => {
-                    if(item.homeTeam.id === tId){
-                        home_away = true
-                    }
-                    else {
-                        home_away = false
-                    }
-                    item.goals.map((goal) => {
-                        if(goal.home === home_away){
-                            goal_counter = goal_counter + 1
+        return new Promise((resolve, reject) => {
+            let goal_counter = 0
+            let home_away = false
+            axios.get("https://app.seker.live/fm1/history/1/" + tId)
+                .then((response) => {
+                    response.data.map((item) => {
+                        if (item.homeTeam.id === tId) {
+                            home_away = true
+                        } else {
+                            home_away = false
                         }
-                        else {
-                            goal_counter = goal_counter - 1
-                        }
-                    })
-                })
-            });
-        this.setState({
-            goals_counter: goal_counter
+                        item.goals.map((goal) => {
+                            if (goal.home === home_away) {
+                                goal_counter = goal_counter + 1
+                            } else {
+                                goal_counter = goal_counter - 1
+                            }
+                        });
+                    });
+                    resolve (goal_counter);
+                });
+        });
+    };
+
+
+    goalDiffrence=(tId) =>{
+        this.goalsCount(tId).then((goalCounter)=>{
+            this.setState({
+                goalsCounter:goalCounter,
+            })
         })
     }
 
     createObject = (data) => {
         let tempArray = [];
         data.map((item) => {
-            this.goalsCount(this.state.teamId);
-            let team = {name: item.name, goals: this.state.goalsCounter, points: 15}
+            this.goalDiffrence(item.id)
+            let team = {name: item.name, goal:this.state.goalsCounter, points: 15}
             tempArray.push(team)
-        })
+        });
         this.setState({
             teamsData: tempArray,
-            goalsCounter: 0
         })
     }
 
@@ -122,7 +128,7 @@ class Table extends React.Component{
                            return (
                                 <tr>
                                     <td>{item.name}</td>
-                                    <td>{item.goals}</td>
+                                    <td>{item.goal}</td>
                                     <td>{item.points}</td>
                                 </tr>
                             );

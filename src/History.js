@@ -18,9 +18,23 @@ class History extends React.Component{
 
 
     leagueNameChanged = (event) => {
+        let id;
+        if(event.target.value===("English"))
+        {
+            id=1
+        }
+        else if(event.target.value===("Spanish"))
+        {
+            id=2
+        }
+        else {
+            id=3
+        }
         this.setState({
             leagueName: event.target.value,
-        })
+            leagueId:id
+        });
+        this.getHistoryData(id)
     }
 
     startRoundChanged = (event) => {
@@ -58,10 +72,10 @@ class History extends React.Component{
         }
     }
 
-    getHistoryData = () => {
+    getHistoryData = (id) => {
         let tempArray = [];
         if(this.state.endRound >= this.state.startRound){
-            axios.get("https://app.seker.live/fm1/history/"+1)
+            axios.get("https://app.seker.live/fm1/history/"+id)
                 .then((response) => {
                     response.data.map((item) => {
                         let round = item.round

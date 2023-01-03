@@ -24,9 +24,23 @@ class Stats extends React.Component{
     leagues_temp = []
 
     leagueNameChanged = (event) => {
+        let id;
+        if(event.target.value===("English"))
+        {
+            id=1
+        }
+        else if(event.target.value===("Spanish"))
+        {
+            id=2
+        }
+        else {
+            id=3
+        }
         this.setState({
             leagueName: event.target.value,
-        })
+            leagueId:id
+        });
+        this.getData(id)
     }
 
     firstOrSecond = (data) => {
@@ -128,8 +142,8 @@ class Stats extends React.Component{
         })
     }
 
-    getData = () => {
-        axios.get("https://app.seker.live/fm1/history/"+1)
+    getData = (id) => {
+        axios.get("https://app.seker.live/fm1/history/"+id)
             .then((response) => {
                 this.firstOrSecond(response.data);
                 this.firstGoal(response.data);
@@ -201,4 +215,4 @@ class Stats extends React.Component{
 }
 
 
-export default Stats
+export default Stats

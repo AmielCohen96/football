@@ -19,13 +19,28 @@ class MostGoals extends React.Component{
 
 
     leagueNameChanged = (event) => {
+        let id;
+        if(event.target.value===("English"))
+        {
+            id=1
+        }
+        else if(event.target.value===("Spanish"))
+        {
+            id=2
+        }
+        else {
+            id=3
+        }
         this.setState({
             leagueName: event.target.value,
-        })
+            leagueId:id
+        });
+        this.topThree(id)
+
     }
 
-    topThree = () => {
-        this.getTopScorerData();
+    topThree = (id) => {
+        this.getTopScorerData(id);
         let slicedArray = []
         console.log(slicedArray)
         setTimeout(()=>{
@@ -34,21 +49,21 @@ class MostGoals extends React.Component{
                 top3: slicedArray,
                 loadingData: false
             })
-        },10*3000)
+        },10*300)
     }
 
-    getTopScorerData = () => {
-        axios.get("https://app.seker.live/fm1/teams/"+1)
+    getTopScorerData = (leaguesId) => {
+        axios.get("https://app.seker.live/fm1/teams/"+3)
             .then((response) => {
                 response.data.map((team) => {
-                    axios.get("https://app.seker.live/fm1/squad/" + 1 + "/" + team.id)
+                    axios.get("https://app.seker.live/fm1/squad/" + 3 + "/" + team.id)
                         .then((response) => {
                             response.data.map((player) => {
                                 let playerId = player.id
                                 let first = player.firstName
                                 let last = player.lastName
                                 let goalCounter = 0
-                                axios.get("https://app.seker.live/fm1/history/" + 1)
+                                axios.get("https://app.seker.live/fm1/history/" + 3 + "/" + team.id)
                                     .then((response) => {
                                         response.data.map((game) => {
                                             game.goals.map((goal) => {
@@ -93,6 +108,7 @@ class MostGoals extends React.Component{
         })
         this.getLeagueData();
         this.topThree();
+        // this.getTopScorerData()
     }
 
     render() {

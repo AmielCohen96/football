@@ -22,6 +22,7 @@ class Table extends React.Component{
         playerArray:[],
         scoreData:[],
         display:false
+
     }
     leagues_temp = []
     pl = 1
@@ -214,17 +215,12 @@ class Table extends React.Component{
 
     componentDidMount() {
         this.getLeagueData();
-        // this.leagueNameChanged()
-        // this.getTeamData();
 
     }
 
     render() {
         return(
             <div className="TB">
-                <br/>
-                {this.state.leagueId}
-                <br/>
                 <select value={this.state.leagueName}  onChange={this.leagueNameChanged} >
                     <option value={"none"} disabled={true}>SELECT LEAGUE</option>
                     {
@@ -238,22 +234,26 @@ class Table extends React.Component{
                 <br/>
                 <br/>
                 <br/>
-                <table width="50%" border="1">
+                <table width="60%" border="2" >
                     <thead>
                     <tr>
-                        <th>place</th>
-                        <th>Team</th>
-                        <th>Goal Difference</th>
-                        <th>Points</th>
+                        <th style={{color:"white"}}>place</th>
+                        <th style={{color:"white"}}>Team</th>
+                        <th style={{color:"white"}}>Goal Difference</th>
+                        <th style={{color:"white"}}>Points</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.teamsData.map((item) => {
+                    {this.state.teamsData.map((item,index) => {
                         return (
-                            <tr>
-                                <td>{item.place}</td>
-                                <td onClick={ ()=>{
-                                    alert(item.teamsId)
+                            <tr
+                                className={index === 0 ? 'firsRow' : index >
+                                this.state.teamsData.length - 4 ? 'lastThreeRows' : ''}
+                            >
+
+                            <td style={{color:"white"}}>{index+1}</td>
+
+                                <td style={{color:"white"}} onClick={ ()=>{
                                     this.dataOnClicked(item.teamsId)
                                     this.getHistoryData(this.state.leagueId,item.teamsId)
                                     this.setState({
@@ -262,8 +262,8 @@ class Table extends React.Component{
                                 }
 
                                 }>{item.name}</td>
-                                <td>{item.goals}</td>
-                                <td>{item.points}</td>
+                                <td style={{color:"white"}}>{item.goals}</td>
+                                <td style={{color:"white"}}>{item.points}</td>
                             </tr>
                         );
                     })
@@ -271,9 +271,9 @@ class Table extends React.Component{
                     </tbody>
 
                 </table>
-                <div>
+                <div style={{color:"white"}}>
                     <ul>
-                        {this.state.display && <label>squad</label>}
+                        {this.state.display && <label>squad:</label>}
                         {this.state.playerArray.map(item =>(
                             <li>
 
@@ -285,14 +285,13 @@ class Table extends React.Component{
                     </ul>
 
                 </div>
-                <div>
-                    <ul>
-                        {this.state.display &&<label>history</label>}
-                        {this.state.scoreData.map(item =>(
+                <div style={{color:"white"}}>
 
+                <ul>
+                        {this.state.display &&<label>history:</label>}
+                        {this.state.scoreData.map(item =>(
                             <li>
                                 {item.homeTeam + " " + item.homeScore + "- " +item.awayScore + " " +item.awayTeam }
-
                             </li>
 
                         ))}

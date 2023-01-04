@@ -15,11 +15,11 @@ class MostGoals extends React.Component{
         loadingData: false
     }
     leagues_temp = []
-    tempArray = []
 
 
     leagueNameChanged = (event) => {
         let id;
+        let tempArr=[]
         if(event.target.value===("English"))
         {
             id=1
@@ -33,37 +33,38 @@ class MostGoals extends React.Component{
         }
         this.setState({
             leagueName: event.target.value,
-            leagueId:id
+            leagueId:id,
+            // scorerData:tempArr
         });
         this.topThree(id)
-
     }
 
     topThree = (id) => {
         this.getTopScorerData(id);
         let slicedArray = []
-        console.log(slicedArray)
         setTimeout(()=>{
             slicedArray = this.state.scorerData.slice(0,3)
+            console.log(slicedArray)
             this.setState({
                 top3: slicedArray,
                 loadingData: false
             })
-        },10*300)
+        },10*80)
     }
 
     getTopScorerData = (leaguesId) => {
-        axios.get("https://app.seker.live/fm1/teams/"+3)
+        let tempArray = []
+        axios.get("https://app.seker.live/fm1/teams/"+leaguesId)
             .then((response) => {
                 response.data.map((team) => {
-                    axios.get("https://app.seker.live/fm1/squad/" + 3 + "/" + team.id)
+                    axios.get("https://app.seker.live/fm1/squad/" + leaguesId + "/" + team.id)
                         .then((response) => {
                             response.data.map((player) => {
                                 let playerId = player.id
                                 let first = player.firstName
                                 let last = player.lastName
                                 let goalCounter = 0
-                                axios.get("https://app.seker.live/fm1/history/" + 3 + "/" + team.id)
+                                axios.get("https://app.seker.live/fm1/history/" + leaguesId + "/" + team.id)
                                     .then((response) => {
                                         response.data.map((game) => {
                                             game.goals.map((goal) => {
@@ -73,14 +74,14 @@ class MostGoals extends React.Component{
                                             })
                                         })
                                         let scorer = {first_Name: first, last_Name: last, goalsScore: goalCounter}
-                                        this.tempArray.push(scorer)
-                                        this.tempArray = this.tempArray.sort((a,b) => {
+                                        tempArray.push(scorer)
+                                        tempArray = tempArray.sort((a,b) => {
                                             if (a.goalsScore > b.goalsScore) {
                                                 return -1
                                             }
                                         })
                                         this.setState({
-                                            scorerData: this.tempArray,
+                                            scorerData: tempArray,
                                         })
                                     });
                             })
@@ -115,9 +116,9 @@ class MostGoals extends React.Component{
         return(
             <div className="MG">
                 {
-                    this.state.loadingData ?
-                        <div style={{fontWeight: "bold", fontSize: "50px"}}><br/><br/>Please wait...</div>
-                        :
+                    // this.state.loadingData ?
+                    //     <div style={{fontWeight: "bold", fontSize: "50px"}}><br/><br/>Please wait...</div>
+                    //     :
                         <div>
                             <br/>
                             League:
@@ -137,9 +138,9 @@ class MostGoals extends React.Component{
                             <br/>
                             <br/>
                             <table width="20%">
-                                <thead>
+                                <thead style={{color:"white"}}>
                                 <tr>
-                                    <th>First Name</th>
+                                    <th >First Name</th>
                                     <th>Last Name</th>
                                     <th>Goals</th>
                                 </tr>
@@ -148,9 +149,9 @@ class MostGoals extends React.Component{
                                 {this.state.top3.map((item) => {
                                     return (
                                         <tr>
-                                            <td>{item.first_Name}</td>
-                                            <td>{item.last_Name}</td>
-                                            <td>{item.goalsScore}</td>
+                                            <td style={{color:"white"}}>{item.first_Name}</td>
+                                            <td style={{color:"white"}}>{item.last_Name}</td>
+                                            <td style={{color:"white"}}>{item.goalsScore}</td>
                                         </tr>
                                     );
                                 })

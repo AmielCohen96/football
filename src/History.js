@@ -134,7 +134,7 @@ class History extends React.Component{
 
     render() {
         return(
-            <div className="HS">
+            <div  style={{color:"white"}} className="HS">
                 <br/>
                 League:
                 <br/>
@@ -182,7 +182,7 @@ class History extends React.Component{
                 <br/>
                 <table width="50%">
                     <thead>
-                    <tr>
+                    <tr style={{color:"white"}}>
                         <th>Round</th>
                         <th>Home team</th>
                         <th>Home goals</th>
@@ -194,7 +194,7 @@ class History extends React.Component{
                     <tbody>
                     {this.state.scoreData.map((item) => {
                         return (
-                            <tr>
+                            <tr style={{color:"white"}}>
                                 <td>{item.roundNumber}</td>
                                 <td>{item.homeTeam}</td>
                                 <td>{item.homeScore}</td>

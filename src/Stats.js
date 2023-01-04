@@ -196,7 +196,7 @@ class Stats extends React.Component{
                 <br/>
                 <br/>
                 <br/>
-                <div style={{fontWeight: "bold", fontSize: "20px"}} className={"TX"}>
+                <div style={{fontWeight: "bold", fontSize: "20px",color:"white"}} className={"TX"}>
                     First half Goals: {this.state.firstHalfGoals}
                     <br/><br/>
                     Second half Goals:{this.state.secondHalfGoals}

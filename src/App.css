@@ -41,7 +41,7 @@
   margin: 10px;
   font-size: xxx-large;
   color: #282c34;
-  background-color: blue;
+  background-color: #008bff;
 }
 table{
   margin: auto;
@@ -57,4 +57,17 @@ tb{
 td{
   margin: 50px;
   border-color: black;
+}
+.firsRow {
+  background-color: blue;
+  /*color: blue;*/
+}
+
+.lastThreeRows{
+  background-color:red;
+  /*color: red;*/
+
+}
+.homePageDesign{
+  background-image: url("https://cdn.xplorer.co.il/MagazineResources/Images/back133052871481043920_back.jpg");
 }

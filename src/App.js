@@ -38,7 +38,8 @@ class App extends React.Component {
   render() {
     return (
         <div className="App">
-            <div style={{fontWeight: "bold", fontSize: "50px", color: "blue"}}>Yossi</div>
+            <style>{'body {background-image: url("https://m.isramedia.net/images/users/2/830c4e1432fff78f9a94d3795bd91132.jpg");}'}</style>
+            <div style={{fontWeight: "bold", fontSize: "50px", color: "blue"}}></div>
             <div>
                 <BrowserRouter>
                     <NavLink style={navLinkStyle} to={"/"} className={"nav"}>Home</NavLink>

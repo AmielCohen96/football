@@ -176,7 +176,7 @@ class History extends React.Component{
                         }
                     </select>
                     <div>
-                        <button onClick={this.buttonClicked} disabled={this.state.leagueName==="none"&&this.state.endRound<=this.state.startRound}>Search</button>
+                        <button onClick={this.buttonClicked} disabled={this.state.leagueName==="none"||this.state.endRound<=this.state.startRound}>Search</button>
                     </div>
                     <table width="50%">
                         <thead>

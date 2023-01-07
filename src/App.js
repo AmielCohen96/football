@@ -30,10 +30,6 @@ class App extends React.Component {
   }
 
 
-  componentDidMount() {
-
-  }
-
 
   render() {
     return (

@@ -14,7 +14,6 @@ class MostGoals extends React.Component{
         table: [],
         loadingData: false
     }
-    leagues_temp = []
 
 
     leagueNameChanged = (event) => {
@@ -94,31 +93,32 @@ class MostGoals extends React.Component{
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
+                let leagueTemp=[]
                 response.data.map((item) => {
-                    this.leagues_temp.push(item.name)
+                    leagueTemp.push(item.name)
                 })
                 this.setState({
-                    leagueData: this.leagues_temp
+                    leagueData: leagueTemp
                 })
             });
     }
 
     componentDidMount() {
+        this.getLeagueData();
+        this.topThree();
+        this.getTopScorerData()
         this.setState({
             loadingData: true
         })
-        this.getLeagueData();
-        this.topThree();
-        // this.getTopScorerData()
     }
 
     render() {
         return(
             <div className="MG">
                 {
-                    // this.state.loadingData ?
-                    //     <div style={{fontWeight: "bold", fontSize: "50px"}}><br/><br/>Please wait...</div>
-                    //     :
+                    this.state.loadingData ?
+                        <div style={{fontWeight: "bold",color:"white", fontSize: "50px"}}><br/><br/>Please wait...</div>
+                        :
                         <div>
                             <br/>
                             League:
@@ -133,31 +133,36 @@ class MostGoals extends React.Component{
                                     })
                                 }
                             </select>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <table width="20%">
-                                <thead style={{color:"white"}}>
-                                <tr>
-                                    <th >First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Goals</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.top3.map((item) => {
-                                    return (
+                            {this.state.leagueName !== "none" &&
+                                <div>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <table width="20%">
+                                        <thead style={{color:"white"}}>
                                         <tr>
-                                            <td style={{color:"white"}}>{item.first_Name}</td>
-                                            <td style={{color:"white"}}>{item.last_Name}</td>
-                                            <td style={{color:"white"}}>{item.goalsScore}</td>
+                                            <th >First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Goals</th>
                                         </tr>
-                                    );
-                                })
-                                }
-                                </tbody>
-                            </table>
+                                        </thead>
+                                        <tbody>
+                                        {this.state.top3.map((item) => {
+                                            return (
+                                                <tr>
+                                                    <td style={{color:"white"}}>{item.first_Name}</td>
+                                                    <td style={{color:"white"}}>{item.last_Name}</td>
+                                                    <td style={{color:"white"}}>{item.goalsScore}</td>
+                                                </tr>
+                                            );
+                                        })
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+
                         </div>
                 }
             </div>

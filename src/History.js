@@ -2,19 +2,17 @@ import React from "react";
 import axios from "axios";
 import './App.css';
 
-
 class History extends React.Component{
 
     state = {
         scoreData: [],
         leagueData: [],
-        leagueName: 'none',
+        leagueName:"none",
         leagueId: '',
         startRound: 1,
         endRound: 15,
-        roundsList: []
+        roundsList: [],
     }
-    leagues_temp = []
 
 
     leagueNameChanged = (event) => {
@@ -34,18 +32,17 @@ class History extends React.Component{
             leagueName: event.target.value,
             leagueId:id
         });
-        this.getHistoryData(id)
     }
 
     startRoundChanged = (event) => {
         this.setState({
-            startRound: event.target.value,
+            startRound: event.target.value
         })
     }
 
     endRoundChanged = (event) => {
         this.setState({
-            endRound: event.target.value,
+            endRound: event.target.value
         })
     }
 
@@ -107,107 +104,111 @@ class History extends React.Component{
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        this.getHistoryData();
-    }
 
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
+                let leagueTemp=[];
                 response.data.map((item) => {
-                    this.leagues_temp.push(item.name)
+                    leagueTemp.push(item.name)
                 })
                 this.setState({
-                    leagueData: this.leagues_temp
+                    leagueData: leagueTemp
                 })
             });
     }
 
 
     componentDidMount() {
+        this.howManyRounds();
         this.getLeagueData();
         this.getHistoryData();
-        this.howManyRounds();
+
     }
 
-
+    buttonClicked=()=>{
+        this.getHistoryData(this.state.leagueId)
+    }
 
     render() {
         return(
             <div  style={{color:"white"}} className="HS">
-                <br/>
-                League:
-                <br/>
-                <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
-                    <option value={"none"} disabled={true}>SELECT LEAGUE</option>
-                    {
-                        this.state.leagueData.map((item) => {
+                <div>
+                    <br/>
+                    League:
+                    <br/>
+                    <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
+                        <option value={"none"} disabled={true}>SELECT LEAGUE</option>
+                        {
+                            this.state.leagueData.map((item) => {
+                                return (
+                                    <option value={item}>{item}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    <br/>
+                    <br/>
+                    Start Round:
+                    <br/>
+                    <select value={this.state.startRound} onChange={this.startRoundChanged}>
+                        <option value={"none"} disabled={true}>SELECT Start Round</option>
+                        {
+                            this.state.roundsList.map((item) => {
+                                return (
+                                    <option value={item}>{item}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    <br/>
+                    <br/>
+                    End Round:
+                    <br/>
+                    <select value={this.state.endRound} onChange={this.endRoundChanged}>
+                        <option value={"none"} disabled={true}>SELECT End Round</option>
+                        {
+                            this.state.roundsList.map((item) => {
+                                return (
+                                    <option value={item}>{item}</option>
+                                )
+                            })
+                        }
+                    </select>
+                    <div>
+                        <button onClick={this.buttonClicked} disabled={this.state.leagueName==="none"&&this.state.endRound<=this.state.startRound}>Search</button>
+                    </div>
+                    <table width="50%">
+                        <thead>
+                        <tr style={{color:"white"}}>
+                            <th>Round</th>
+                            <th>Home team</th>
+                            <th>Home goals</th>
+                            <th>vs</th>
+                            <th>Away goals</th>
+                            <th>Away team</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.scoreData.map((item) => {
                             return (
-                                <option value={item}>{item}</option>
-                            )
+                                <tr style={{color:"white"}}>
+                                    <td>{item.roundNumber}</td>
+                                    <td>{item.homeTeam}</td>
+                                    <td>{item.homeScore}</td>
+                                    <td>-</td>
+                                    <td>{item.awayScore}</td>
+                                    <td>{item.awayTeam}</td>
+                                </tr>
+                            );
                         })
-                    }
-                </select>
-                <br/>
-                <br/>
-                Start Round:
-                <br/>
-                <select value={this.state.startRound} onChange={this.startRoundChanged}>
-                    <option value={"none"} disabled={true}>SELECT Start Round</option>
-                    {
-                        this.state.roundsList.map((item) => {
-                            return (
-                                <option value={item}>{item}</option>
-                            )
-                        })
-                    }
-                </select>
-                <br/>
-                <br/>
-                End Round:
-                <br/>
-                <select value={this.state.endRound} onChange={this.endRoundChanged}>
-                    <option value={"none"} disabled={true}>SELECT End Round</option>
-                    {
-                        this.state.roundsList.map((item) => {
-                            return (
-                                <option value={item}>{item}</option>
-                            )
-                        })
-                    }
-                </select>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <table width="50%">
-                    <thead>
-                    <tr style={{color:"white"}}>
-                        <th>Round</th>
-                        <th>Home team</th>
-                        <th>Home goals</th>
-                        <th>vs</th>
-                        <th>Away goals</th>
-                        <th>Away team</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.scoreData.map((item) => {
-                        return (
-                            <tr style={{color:"white"}}>
-                                <td>{item.roundNumber}</td>
-                                <td>{item.homeTeam}</td>
-                                <td>{item.homeScore}</td>
-                                <td>-</td>
-                                <td>{item.awayScore}</td>
-                                <td>{item.awayTeam}</td>
-                            </tr>
-                        );
-                    })
-                    }
-                    </tbody>
-                </table>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
+
         )
     }
 }

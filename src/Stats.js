@@ -21,8 +21,6 @@ class Stats extends React.Component{
         highRoundName: null
     }
 
-    leagues_temp = []
-
     leagueNameChanged = (event) => {
         let id;
         if(event.target.value===("English"))
@@ -153,20 +151,18 @@ class Stats extends React.Component{
             })
     }
 
-
-
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
+                let leagueTemp=[]
                 response.data.map((item) => {
-                    this.leagues_temp.push(item.name)
+                    leagueTemp.push(item.name)
                 })
                 this.setState({
-                    leagueData: this.leagues_temp
+                    leagueData: leagueTemp
                 })
             });
     }
-
 
     componentDidMount() {
         this.getLeagueData();
@@ -178,9 +174,6 @@ class Stats extends React.Component{
         return(
             <div className="ST">
                 <br/>
-                {this.state.leagueId}
-                <br/>
-                {this.state.leagueName}
                 <br/>
                 <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
                     <option value={"none"} disabled={true}>SELECT LEAGUE</option>
@@ -192,23 +185,29 @@ class Stats extends React.Component{
                         })
                     }
                 </select>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <div style={{fontWeight: "bold", fontSize: "20px",color:"white"}} className={"TX"}>
-                    First half Goals: {this.state.firstHalfGoals}
-                    <br/><br/>
-                    Second half Goals:{this.state.secondHalfGoals}
-                    <br/><br/>
-                    The fastest goal was scored in the {this.state.fastGoal}th minute
-                    <br/><br/>
-                    The latest goal was scored in the {this.state.lateGoal}th minute
-                    <br/><br/>
-                    The round with the most goals was round {this.state.highRoundName}, in which {this.state.highRound} goals were scored
-                    <br/><br/>
-                    The round with the fewest goals was round {this.state.lowRoundName}, in which {this.state.lowRound} goals were scored
-                </div>
+                {this.state.leagueName!=='none'&&
+                    <div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <div style={{fontWeight: "bold", fontSize: "20px",color:"white"}} className={"TX"}>
+                            First half Goals: {this.state.firstHalfGoals}
+                            <br/><br/>
+                            Second half Goals:{this.state.secondHalfGoals}
+                            <br/><br/>
+                            The fastest goal was scored in the {this.state.fastGoal}th minute
+                            <br/><br/>
+                            The latest goal was scored in the {this.state.lateGoal}th minute
+                            <br/><br/>
+                            The round with the most goals was round {this.state.highRoundName}, in which {this.state.highRound} goals were scored
+                            <br/><br/>
+                            The round with the fewest goals was round {this.state.lowRoundName}, in which {this.state.lowRound} goals were scored
+                        </div>
+
+                    </div>
+                }
+
             </div>
         )
     }

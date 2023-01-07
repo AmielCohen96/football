@@ -22,14 +22,7 @@ class Table extends React.Component{
         playerArray:[],
         scoreData:[],
         display:false
-
     }
-    leagues_temp = []
-    pl = 1
-    teams_temp = []
-    goal_count_temp = 0
-
-
 
     leagueNameChanged = (event) => {
         let id;
@@ -49,9 +42,6 @@ class Table extends React.Component{
             leagueId:id
         });
         this.getTeamData(id)
-
-
-
 
     }
 
@@ -80,17 +70,17 @@ class Table extends React.Component{
         let home_away = false
         let i=1
         teamsData.map((item) => {
-            let tId = item.id
-            let tName = item.name
+            let teamId = item.id
+            // let teamName = item.name
             let totalGoals = 0
             let points = 0
-            // alert(tId)
-            axios.get("https://app.seker.live/fm1/history/"+this.state.leagueId+"/"+tId)
+            // alert(teamId)
+            axios.get("https://app.seker.live/fm1/history/"+this.state.leagueId+"/"+teamId)
                 .then((response) => {
                     response.data.map((history) => {
                         let goalsFor = 0
                         let goalAgainst = 0
-                        if(history.homeTeam.id === tId){
+                        if(history.homeTeam.id === teamId){
                             home_away = true
                         }
                         else {
@@ -105,7 +95,7 @@ class Table extends React.Component{
                                 totalGoals = totalGoals - 1
                                 goalAgainst = goalAgainst + 1
                             }
-                            // console.log(tName + ' Goals: ' + totalGoals)
+                            // console.log(teamName + ' Goals: ' + totalGoals)
                         })
                         if(goalAgainst === goalsFor){
                             points = points + 1
@@ -115,7 +105,7 @@ class Table extends React.Component{
                         }
                     })
 
-                    let team = {teamsId:tId,place: i, name: item.name, goals: totalGoals, points: points}
+                    let team = {teamsId:teamId,place: i, name: item.name, goals: totalGoals, points: points}
                     i=i+1
                     tempArray.push(team)
                     tempArray = tempArray.sort((a,b) => {
@@ -138,18 +128,14 @@ class Table extends React.Component{
                     })
                 });
         })
-
     }
 
     getTeamData =  (id) => {
-
             axios.get("https://app.seker.live/fm1/teams/"+id )
                 .then((response) => {
                     this.createObject(response.data)
                 })
-
     }
-
 
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
@@ -163,8 +149,8 @@ class Table extends React.Component{
                     leagueData: leaguesTemp,
                 })
             });
-
     }
+
     dataOnClicked=(teamsId)=>{
         let tempPlayerArr = []
         let id=1
@@ -182,9 +168,10 @@ class Table extends React.Component{
                 })
             })
     }
-    getHistoryData = (id,tId) => {
+
+    getHistoryData = (id,teamId) => {
         let tempArray = [];
-            axios.get("https://app.seker.live/fm1/history/"+id +"/" + tId)
+            axios.get("https://app.seker.live/fm1/history/"+id +"/" + teamId)
                 .then((response) => {
                     response.data.map((item) => {
                             let home1 = ''
@@ -212,15 +199,15 @@ class Table extends React.Component{
                 })
     }
 
-
     componentDidMount() {
         this.getLeagueData();
-
     }
 
     render() {
         return(
             <div className="TB">
+                <br/>
+                <br/>
                 <select value={this.state.leagueName}  onChange={this.leagueNameChanged} >
                     <option value={"none"} disabled={true}>SELECT LEAGUE</option>
                     {
@@ -231,73 +218,77 @@ class Table extends React.Component{
                         })
                     }
                 </select>
-                <br/>
-                <br/>
-                <br/>
-                <table width="60%" border="2" >
-                    <thead>
-                    <tr>
-                        <th style={{color:"white"}}>place</th>
-                        <th style={{color:"white"}}>Team</th>
-                        <th style={{color:"white"}}>Goal Difference</th>
-                        <th style={{color:"white"}}>Points</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.teamsData.map((item,index) => {
-                        return (
-                            <tr
-                                className={index === 0 ? 'firsRow' : index >
-                                this.state.teamsData.length - 4 ? 'lastThreeRows' : ''}
-                            >
-
-                            <td style={{color:"white"}}>{index+1}</td>
-
-                                <td style={{color:"white"}} onClick={ ()=>{
-                                    this.dataOnClicked(item.teamsId)
-                                    this.getHistoryData(this.state.leagueId,item.teamsId)
-                                    this.setState({
-                                        display:true
-                                    })
-                                }
-
-                                }>{item.name}</td>
-                                <td style={{color:"white"}}>{item.goals}</td>
-                                <td style={{color:"white"}}>{item.points}</td>
+                {this.state.leagueName!=="none"&&
+                    <div>
+                        <br/>
+                        <br/>
+                        <table width="60%" border="2" >
+                            <thead>
+                            <tr>
+                                <th style={{color:"white"}}>place</th>
+                                <th style={{color:"white"}}>Team</th>
+                                <th style={{color:"white"}}>Goal Difference</th>
+                                <th style={{color:"white"}}>Points</th>
                             </tr>
-                        );
-                    })
-                    }
-                    </tbody>
+                            </thead>
+                            <tbody>
+                            {this.state.teamsData.map((item,index) => {
+                                return (
+                                    <tr
+                                        className={index === 0 ? 'firsRow' : index >
+                                        this.state.teamsData.length - 4 ? 'lastThreeRows' : ''}
+                                    >
 
-                </table>
-                <div style={{color:"white"}}>
-                    <ul>
-                        {this.state.display && <label>squad:</label>}
-                        {this.state.playerArray.map(item =>(
-                            <li>
+                                        <td style={{color:"white"}}>{index+1}</td>
 
-                                {item.fName + " " + item.lName}
+                                        <td style={{color:"white"}} onClick={ ()=>{
+                                            this.dataOnClicked(item.teamsId)
+                                            this.getHistoryData(this.state.leagueId,item.teamsId)
+                                            this.setState({
+                                                display:true
+                                            })
+                                        }
 
-                            </li>
+                                        }>{item.name}</td>
+                                        <td style={{color:"white"}}>{item.goals}</td>
+                                        <td style={{color:"white"}}>{item.points}</td>
+                                    </tr>
+                                );
+                            })
+                            }
+                            </tbody>
 
-                        ))}
-                    </ul>
+                        </table>
+                        <div style={{color:"white"}}>
+                            <ul>
+                                {this.state.display && <label>squad:</label>}
+                                {this.state.playerArray.map(item =>(
+                                    <li>
 
-                </div>
-                <div style={{color:"white"}}>
+                                        {item.fName + " " + item.lName}
 
-                <ul>
-                        {this.state.display &&<label>history:</label>}
-                        {this.state.scoreData.map(item =>(
-                            <li>
-                                {item.homeTeam + " " + item.homeScore + "- " +item.awayScore + " " +item.awayTeam }
-                            </li>
+                                    </li>
 
-                        ))}
-                    </ul>
+                                ))}
+                            </ul>
 
-                </div>
+                        </div>
+                        <div style={{color:"white"}}>
+
+                            <ul>
+                                {this.state.display &&<label>history:</label>}
+                                {this.state.scoreData.map(item =>(
+                                    <li>
+                                        {item.homeTeam + " " + item.homeScore + "- " +item.awayScore + " " +item.awayTeam }
+                                    </li>
+
+                                ))}
+                            </ul>
+
+                        </div>
+                    </div>
+                }
+
             </div>
 
         )

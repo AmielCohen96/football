@@ -93,8 +93,6 @@ class History extends React.Component{
 
     componentDidMount() {
         this.howManyRounds();
-        this.getHistoryData(this.props.id);
-
     }
 
 

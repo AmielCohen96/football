@@ -136,10 +136,6 @@ class Stats extends React.Component{
         this.getData()
     }
 
-    componentDidMount() {
-        this.getData();
-    }
-
 
     render() {
         return(

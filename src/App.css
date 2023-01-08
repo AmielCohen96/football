@@ -41,7 +41,7 @@
   margin: 10px;
   font-size: xxx-large;
   color: #282c34;
-  background-color: #008bff;
+  /*background-color: #008bff;*/
 }
 table{
   margin: auto;
@@ -58,6 +58,14 @@ td{
   margin: 50px;
   border-color: black;
 }
+
+.firsRow {
+  color: blue;
+}
+
+.lastThreeRows{
+  color: red;
+}
 .firsRow {
   background-color: blue;
   /*color: blue;*/
@@ -68,6 +76,35 @@ td{
   /*color: red;*/
 
 }
-.homePageDesign{
-  background-image: url("https://cdn.xplorer.co.il/MagazineResources/Images/back133052871481043920_back.jpg");
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: skyblue;
+  color: skyblue;
+  padding: 0 20px;
+  height: 60px;
 }
+
+.toolbar .nav {
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.toolbar .nav:hover {
+  color: black;
+}
+
+.text-center {
+  text-align: center;
+}
+
+
+
+
+
+
+
+

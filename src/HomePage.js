@@ -6,10 +6,17 @@ import './App.css';
 class HomePage extends React.Component{
     render() {
         return(
-            <div style={{fontWeight: "bold", fontSize: "50px",color:"white"}}>
-                welcome to the new sport website
-                sport TWO
+            <div style={{fontWeight: "bold", fontSize: "80px",color:"white"}}>
+
+
+
+                <div className={"text-center"}>welcome to the new sport website
+                </div>
+                <div>
+                    sport TWO
+                </div>
             </div>
+
         )
     }
     }

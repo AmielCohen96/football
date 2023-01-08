@@ -1,7 +1,10 @@
 import React from "react";
 import axios from "axios";
 import './App.css';
+import History from "./History"
 import mostGoals from "./MostGoals";
+import {includes} from "react-table/src/filterTypes";
+import {render} from "@testing-library/react";
 
 
 
@@ -23,6 +26,10 @@ class Table extends React.Component{
         scoreData:[],
         display:false
     }
+    leagues_temp = []
+    pl = 1
+    teams_temp = []
+    goal_count_temp = 0
 
     leagueNameChanged = (event) => {
         let id;
@@ -206,8 +213,7 @@ class Table extends React.Component{
     render() {
         return(
             <div className="TB">
-                <br/>
-                <br/>
+
                 <select value={this.state.leagueName}  onChange={this.leagueNameChanged} >
                     <option value={"none"} disabled={true}>SELECT LEAGUE</option>
                     {
@@ -220,15 +226,13 @@ class Table extends React.Component{
                 </select>
                 {this.state.leagueName!=="none"&&
                     <div>
-                        <br/>
-                        <br/>
-                        <table width="60%" border="2" >
+                        <table width="60%" border="2" bgcolor={"white"}>
                             <thead>
                             <tr>
-                                <th style={{color:"white"}}>place</th>
-                                <th style={{color:"white"}}>Team</th>
-                                <th style={{color:"white"}}>Goal Difference</th>
-                                <th style={{color:"white"}}>Points</th>
+                                <th style={{color:"black"}}>place</th>
+                                <th style={{color:"black"}}>Team</th>
+                                <th style={{color:"black"}}>Goal Difference</th>
+                                <th style={{color:"black"}}>Points</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -239,9 +243,9 @@ class Table extends React.Component{
                                         this.state.teamsData.length - 4 ? 'lastThreeRows' : ''}
                                     >
 
-                                        <td style={{color:"white"}}>{index+1}</td>
+                                        <td style={{color:"black"}}>{index+1}</td>
 
-                                        <td style={{color:"white"}} onClick={ ()=>{
+                                        <td style={{color:"black"}} onClick={ ()=>{
                                             this.dataOnClicked(item.teamsId)
                                             this.getHistoryData(this.state.leagueId,item.teamsId)
                                             this.setState({
@@ -250,8 +254,8 @@ class Table extends React.Component{
                                         }
 
                                         }>{item.name}</td>
-                                        <td style={{color:"white"}}>{item.goals}</td>
-                                        <td style={{color:"white"}}>{item.points}</td>
+                                        <td style={{color:"black"}}>{item.goals}</td>
+                                        <td style={{color:"black"}}>{item.points}</td>
                                     </tr>
                                 );
                             })
@@ -259,7 +263,7 @@ class Table extends React.Component{
                             </tbody>
 
                         </table>
-                        <div style={{color:"white"}}>
+                        <div style={{backgroundColor:'whitesmoke'}}>
                             <ul>
                                 {this.state.display && <label>squad:</label>}
                                 {this.state.playerArray.map(item =>(
@@ -273,7 +277,7 @@ class Table extends React.Component{
                             </ul>
 
                         </div>
-                        <div style={{color:"white"}}>
+                        <div style={{backgroundColor:'whitesmoke'}}>
 
                             <ul>
                                 {this.state.display &&<label>history:</label>}

@@ -9,8 +9,8 @@ import Stats from "./Stats";
 import Table from "./Table";
 
 const navLinkStyle = ({isActive}) =>isActive? {
-    backgroundColor: "white",
-    color: "black"
+    backgroundColor: "green",
+    color: "white"
     }:{
     color: "black"
 }
@@ -34,22 +34,28 @@ class App extends React.Component {
   render() {
     return (
         <div className="App">
-            <style>{'body {background-image: url("https://m.isramedia.net/images/users/2/830c4e1432fff78f9a94d3795bd91132.jpg");}'}</style>
-            <div style={{fontWeight: "bold", fontSize: "50px", color: "blue"}}></div>
+            <style>{'body {background-image: url("https://www.yo-yoo.co.il/pics/uploads/35a18f.jpg");}'}</style>
+            <div style={{fontWeight: "bold", fontSize: "50px", color: "white"}}></div>
             <div>
                 <BrowserRouter>
-                    <NavLink style={navLinkStyle} to={"/"} className={"nav"}>Home</NavLink>
-                    <NavLink style={navLinkStyle} to={"/Table"} className={"nav"}>Table</NavLink>
-                    <NavLink style={navLinkStyle} to={"/Stats"} className={"nav"}>Stats</NavLink>
-                    <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>Most Goals</NavLink>
-                    <NavLink style={navLinkStyle} to={"/History"} className={"nav"}>History</NavLink>
-                    <Routes>
-                        <Route path={"/"} element={<HomePage />}/>
-                        <Route path={"/Table"} element={<Table />}/>
-                        <Route path={"/Stats"} element={<Stats />}/>
-                        <Route path={"/MostGoals"} element={<MostGoals />}/>
-                        <Route path={"/History"} element={<History />}/>
-                    </Routes>
+                    <div className={"toolbar"}>
+                        <NavLink style={navLinkStyle} to={"/"} className={"nav"}>Home</NavLink>
+                        <NavLink style={navLinkStyle} to={"/Table"} className={"nav"}>Table</NavLink>
+                        <NavLink style={navLinkStyle} to={"/Stats"} className={"nav"}>Stats</NavLink>
+                        <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>Most Goals</NavLink>
+                        <NavLink style={navLinkStyle} to={"/History"} className={"nav"}>History</NavLink>
+                    </div>
+                    <div>
+
+                        <Routes>
+                            <Route path={"/"} element={<HomePage />}/>
+                            <Route path={"/Table"} element={<Table />}/>
+                            <Route path={"/Stats"} element={<Stats />}/>
+                            <Route path={"/MostGoals"} element={<MostGoals />}/>
+                            <Route path={"/History"} element={<History />}/>
+                        </Routes>
+                    </div>
+
                 </BrowserRouter>
                 <br/>
             </div>

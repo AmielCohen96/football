@@ -178,9 +178,9 @@ class History extends React.Component{
                     <div>
                         <button onClick={this.buttonClicked} disabled={this.state.leagueName==="none"||this.state.endRound<=this.state.startRound}>Search</button>
                     </div>
-                    <table width="50%">
+                    <table width="50%" bgcolor={"white"}>
                         <thead>
-                        <tr style={{color:"white"}}>
+                        <tr style={{color:"black"}}>
                             <th>Round</th>
                             <th>Home team</th>
                             <th>Home goals</th>
@@ -192,7 +192,7 @@ class History extends React.Component{
                         <tbody>
                         {this.state.scoreData.map((item) => {
                             return (
-                                <tr style={{color:"white"}}>
+                                <tr style={{color:"black"}}>
                                     <td>{item.roundNumber}</td>
                                     <td>{item.homeTeam}</td>
                                     <td>{item.homeScore}</td>

@@ -8,16 +8,13 @@ class MostGoals extends React.Component{
     state = {
         scorerData: [],
         top3: [],
-        leagueData: [],
         change: 'none',
-        leagueId: '',
-        table: [],
         loadingData: false
     }
 
 
 
-    topThree = (id) => {
+    topThree = () => {
         this.getTopScorerData(this.props.id);
         let slicedArray = []
         if(this.props.id === 1 || this.props.id === 2 || this.props.id === 3)
@@ -35,19 +32,19 @@ class MostGoals extends React.Component{
         },10*80)
     }
 
-    getTopScorerData = (leaguesId) => {
+    getTopScorerData = () => {
         let tempArray = []
         axios.get("https://app.seker.live/fm1/teams/"+this.props.id)
             .then((response) => {
                 response.data.map((team) => {
-                    axios.get("https://app.seker.live/fm1/squad/" + leaguesId + "/" + team.id)
+                    axios.get("https://app.seker.live/fm1/squad/" + this.props.id + "/" + team.id)
                         .then((response) => {
                             response.data.map((player) => {
                                 let playerId = player.id
                                 let first = player.firstName
                                 let last = player.lastName
                                 let goalCounter = 0
-                                axios.get("https://app.seker.live/fm1/history/" + leaguesId + "/" + team.id)
+                                axios.get("https://app.seker.live/fm1/history/" + this.props.id + "/" + team.id)
                                     .then((response) => {
                                         response.data.map((game) => {
                                             game.goals.map((goal) => {
@@ -75,8 +72,8 @@ class MostGoals extends React.Component{
     }
 
     buttonClicked=()=>{
-        this.topThree(this.props.id);
-        this.getTopScorerData(this.props.id)
+        this.topThree();
+        this.getTopScorerData()
         this.setState({
             loadingData: true
         })

@@ -7,10 +7,6 @@ import './App.css';
 class Stats extends React.Component{
 
     state = {
-        team_name: 'none',
-        leagueData: [],
-        leagueName: 'none',
-        leagueId: '',
         firstHalfGoals: 0,
         secondHalfGoals: 0,
         fastGoal: 0,
@@ -18,7 +14,8 @@ class Stats extends React.Component{
         lowRound: null,
         lowRoundName: null,
         highRound: null,
-        highRoundName: null
+        highRoundName: null,
+        load: true
     }
 
 
@@ -129,6 +126,9 @@ class Stats extends React.Component{
                 this.latestGoal(response.data);
                 this.fewestGoalsRound(response.data);
                 this.mostGoalsRound(response.data);
+                this.setState({
+                    load: false
+                })
             })
     }
 
@@ -141,7 +141,6 @@ class Stats extends React.Component{
         return(
             <div className="ST">
                 <br/>
-                <br/>
                     <div>
                         <div>
                             <button onClick={this.buttonClicked} disabled={this.props.league ==="none"}>Refresh</button>
@@ -149,7 +148,8 @@ class Stats extends React.Component{
                         <br/>
                         <br/>
                         <br/>
-                        <div style={{fontWeight: "bold", fontSize: "20px",color:"white"}} className={"TX"}>
+                        {this.state.load === false &&
+                            <div style={{fontWeight: "bold", fontSize: "20px",color:"white"}} className={"TX"}>
                             First half Goals: {this.state.firstHalfGoals}
                             <br/><br/>
                             Second half Goals:{this.state.secondHalfGoals}
@@ -162,6 +162,7 @@ class Stats extends React.Component{
                             <br/><br/>
                             The round with the fewest goals was round {this.state.lowRoundName}, in which {this.state.lowRound} goals were scored
                         </div>
+                        }
                     </div>
             </div>
         )

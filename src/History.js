@@ -6,9 +6,6 @@ class History extends React.Component{
 
     state = {
         scoreData: [],
-        leagueData: [],
-        leagueName:"none",
-        leagueId: '',
         startRound: 1,
         endRound: 15,
         roundsList: [],
@@ -51,9 +48,8 @@ class History extends React.Component{
         }
     }
 
-    getHistoryData = (id) => {
+    getHistoryData = () => {
         let tempArray = [];
-        if(this.state.endRound >= this.state.startRound){
             axios.get("https://app.seker.live/fm1/history/"+this.props.id)
                 .then((response) => {
                     response.data.map((item) => {
@@ -83,7 +79,6 @@ class History extends React.Component{
                         }
                     });
                 })
-        }
     }
 
     buttonClicked=()=>{
@@ -127,9 +122,11 @@ class History extends React.Component{
                             })
                         }
                     </select>
+                    <br/>
                     <div>
-                        <button onClick={this.buttonClicked} disabled={this.props.league === "none" || this.state.endRound < this.state.startRound}>Search</button>
+                        <button onClick={this.buttonClicked} disabled={this.props.league === "none" || parseInt(this.state.endRound) < parseInt(this.state.startRound)}>Search</button>
                     </div>
+                    <br/>
                     <table width="50%" bgcolor={"white"}>
                         <thead>
                         <tr style={{color:"black"}}>

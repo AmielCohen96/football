@@ -9,25 +9,12 @@ import App from "./App";
 class Table extends React.Component{
 
     state = {
-        team_name: 'none',
-        teamId: 60,
-        result: 0,
         teamsData: [],
-        teamsName: '',
-        leagueData: [],
-        leagueName: 'none',
-        leagueId: 0,
-        goalsCounter: 0,
-        team_count: 0,
-        leaguesId:[],
         playerArray:[],
         scoreData:[],
         display:false
     }
-    leagues_temp = []
-    pl = 1
-    teams_temp = []
-    goal_count_temp = 0
+
 
 
     createObject = async (teamsData) => {
@@ -36,10 +23,8 @@ class Table extends React.Component{
         let i=1
         teamsData.map((item) => {
             let teamId = item.id
-            // let teamName = item.name
             let totalGoals = 0
             let points = 0
-            // alert(teamId)
             axios.get("https://app.seker.live/fm1/history/"+this.props.id+"/"+teamId)
                 .then((response) => {
                     response.data.map((history) => {
@@ -120,7 +105,7 @@ class Table extends React.Component{
             })
     }
 
-    getHistoryData = (id,teamId) => {
+    getHistoryData = (teamId) => {
         let tempArray = [];
             axios.get("https://app.seker.live/fm1/history/"+ this.props.id +"/" + teamId)
                 .then((response) => {
@@ -185,7 +170,7 @@ class Table extends React.Component{
                                         <td style={{color:"black"}}>{index+1}</td>
                                         <td style={{color:"black"}} onClick={ ()=>{
                                             this.dataOnClicked(item.teamsId)
-                                            this.getHistoryData(this.state.leagueId,item.teamsId)
+                                            this.getHistoryData(item.teamsId)
                                             this.setState({
                                                 display:true
                                             })
@@ -199,9 +184,9 @@ class Table extends React.Component{
                             }
                             </tbody>
                         </table>
-                        <div style={{backgroundColor:'whitesmoke'}}>
+                        <div style={{backgroundColor:'opacity' ,color:"white"}}>
                             <ul>
-                                {this.state.display && <label>squad:</label>}
+                                {this.state.display && <label><h1>Squad:</h1></label>}
                                 {this.state.playerArray.map(item =>(
                                     <li>
                                         {item.fName + " " + item.lName}
@@ -209,9 +194,9 @@ class Table extends React.Component{
                                 ))}
                             </ul>
                         </div>
-                        <div style={{backgroundColor:'whitesmoke'}}>
+                        <div style={{backgroundColor:'opacity',color:"white"}}>
                             <ul>
-                                {this.state.display &&<label>history:</label>}
+                                {this.state.display &&<label><h1>History:</h1></label>}
                                 {this.state.scoreData.map(item =>(
                                     <li>
                                         {item.homeTeam + " " + item.homeScore + "- " +item.awayScore + " " +item.awayTeam }

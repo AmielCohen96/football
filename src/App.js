@@ -46,6 +46,12 @@ class App extends React.Component {
         });
     }
 
+    noneClick = () => {
+      this.setState({
+          leagueName: 'none'
+      })
+    }
+
     getLeagueData = () => {
         axios.get("https://app.seker.live/fm1/leagues")
             .then((response) => {
@@ -73,10 +79,10 @@ class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <div className={"toolbar"}>
-                        <NavLink style={navLinkStyle} to={"/Table"} className={"nav"}>Table</NavLink>
-                        <NavLink style={navLinkStyle} to={"/Stats"} className={"nav"}>Stats</NavLink>
-                        <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>Most Goals</NavLink>
-                        <NavLink style={navLinkStyle} to={"/History"} className={"nav"}>History</NavLink>
+                        <NavLink style={navLinkStyle} to={"/Table"} className={"nav"} onClick={this.noneClick}>Table</NavLink>
+                        <NavLink style={navLinkStyle} to={"/Stats"} className={"nav"} onClick={this.noneClick}>Stats</NavLink>
+                        <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"} onClick={this.noneClick}>Most Goals</NavLink>
+                        <NavLink style={navLinkStyle} to={"/History"} className={"nav"} onClick={this.noneClick}>History</NavLink>
                     </div>
                     <br/>
                     <div className={"League select"} style={{color:"white"}}>

@@ -8,6 +8,8 @@ import MostGoals from "./MostGoals";
 import Stats from "./Stats";
 import Table from "./Table";
 
+
+
 const navLinkStyle = ({isActive}) =>isActive? {
     backgroundColor: "green",
     color: "white"
@@ -20,7 +22,7 @@ const navLinkStyle = ({isActive}) =>isActive? {
 class App extends React.Component {
 
   state = {
-      team_name: 'none',
+      team_name: 1,
       result: 0,
       teamsData: [],
       teamsName: '',
@@ -31,7 +33,45 @@ class App extends React.Component {
 
 
 
-  render() {
+    leagueNameChanged = (event) => {
+        let id;
+        if(event.target.value===("English"))
+        {
+            id=1
+        }
+        else if(event.target.value===("Spanish"))
+        {
+            id=2
+        }
+        else {
+            id=3
+        }
+        this.setState({
+            leagueName: event.target.value,
+            leagueId:id
+        });
+    }
+
+    getLeagueData = () => {
+        axios.get("https://app.seker.live/fm1/leagues")
+            .then((response) => {
+                let leaguesTemp=[]
+                response.data.map((item) => {
+                    let leagues=item.name
+                    leaguesTemp.push(leagues)
+                })
+                this.setState({
+                    leagueData: leaguesTemp,
+                })
+            });
+    }
+
+    componentDidMount() {
+      this.getLeagueData();
+    }
+
+
+    render() {
     return (
         <div className="App">
             <style>{'body {background-image: url("https://www.yo-yoo.co.il/pics/uploads/35a18f.jpg");}'}</style>
@@ -45,21 +85,29 @@ class App extends React.Component {
                         <NavLink style={navLinkStyle} to={"/MostGoals"} className={"nav"}>Most Goals</NavLink>
                         <NavLink style={navLinkStyle} to={"/History"} className={"nav"}>History</NavLink>
                     </div>
+                    <br/>
+                    <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
+                        <option value={"none"} disabled={true}>SELECT LEAGUE</option>
+                        {
+                            this.state.leagueData.map((item) => {
+                              return (
+                                    <option value={item}>{item}</option>
+                                )
+                            })
+                        }
+                    </select>
                     <div>
-
                         <Routes>
-                            <Route path={"/"} element={<HomePage />}/>
-                            <Route path={"/Table"} element={<Table />}/>
-                            <Route path={"/Stats"} element={<Stats />}/>
-                            <Route path={"/MostGoals"} element={<MostGoals />}/>
-                            <Route path={"/History"} element={<History />}/>
+                            <Route path={"/"} element={<HomePage id={this.state.leagueId} league={this.state.leagueName}/>}/>
+                            <Route path={"/Table"} element={<Table id={this.state.leagueId} league={this.state.leagueName}/>}/>
+                            <Route path={"/Stats"} element={<Stats id={this.state.leagueId} league={this.state.leagueName}/>}/>
+                            <Route path={"/MostGoals"} element={<MostGoals id={this.state.leagueId} league={this.state.leagueName}/>}/>
+                            <Route path={"/History"} element={<History id={this.state.leagueId} league={this.state.leagueName}/>}/>
                         </Routes>
                     </div>
 
                 </BrowserRouter>
-                <br/>
             </div>
-
         </div>
       );
     }

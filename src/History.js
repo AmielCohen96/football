@@ -15,24 +15,6 @@ class History extends React.Component{
     }
 
 
-    leagueNameChanged = (event) => {
-        let id;
-        if(event.target.value===("English"))
-        {
-            id=1
-        }
-        else if(event.target.value===("Spanish"))
-        {
-            id=2
-        }
-        else {
-            id=3
-        }
-        this.setState({
-            leagueName: event.target.value,
-            leagueId:id
-        });
-    }
 
     startRoundChanged = (event) => {
         this.setState({
@@ -48,7 +30,7 @@ class History extends React.Component{
 
 
     howManyRounds = () => {
-        axios.get("https://app.seker.live/fm1/history/"+1)
+        axios.get("https://app.seker.live/fm1/history/"+this.props.id)
             .then((response) => {
                 response.data.map((item) => {
                     this.setState({
@@ -72,7 +54,7 @@ class History extends React.Component{
     getHistoryData = (id) => {
         let tempArray = [];
         if(this.state.endRound >= this.state.startRound){
-            axios.get("https://app.seker.live/fm1/history/"+id)
+            axios.get("https://app.seker.live/fm1/history/"+this.props.id)
                 .then((response) => {
                     response.data.map((item) => {
                         let round = item.round
@@ -104,50 +86,22 @@ class History extends React.Component{
         }
     }
 
-
-    getLeagueData = () => {
-        axios.get("https://app.seker.live/fm1/leagues")
-            .then((response) => {
-                let leagueTemp=[];
-                response.data.map((item) => {
-                    leagueTemp.push(item.name)
-                })
-                this.setState({
-                    leagueData: leagueTemp
-                })
-            });
+    buttonClicked=()=>{
+        this.getHistoryData(this.props.id)
     }
 
 
     componentDidMount() {
         this.howManyRounds();
-        this.getLeagueData();
-        this.getHistoryData();
+        this.getHistoryData(this.props.id);
 
     }
 
-    buttonClicked=()=>{
-        this.getHistoryData(this.state.leagueId)
-    }
 
     render() {
         return(
             <div  style={{color:"white"}} className="HS">
                 <div>
-                    <br/>
-                    League:
-                    <br/>
-                    <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
-                        <option value={"none"} disabled={true}>SELECT LEAGUE</option>
-                        {
-                            this.state.leagueData.map((item) => {
-                                return (
-                                    <option value={item}>{item}</option>
-                                )
-                            })
-                        }
-                    </select>
-                    <br/>
                     <br/>
                     Start Round:
                     <br/>
@@ -176,7 +130,7 @@ class History extends React.Component{
                         }
                     </select>
                     <div>
-                        <button onClick={this.buttonClicked} disabled={this.state.leagueName==="none"||this.state.endRound<=this.state.startRound}>Search</button>
+                        <button onClick={this.buttonClicked} disabled={this.props.league === "none" || this.state.endRound < this.state.startRound}>Search</button>
                     </div>
                     <table width="50%" bgcolor={"white"}>
                         <thead>
@@ -206,9 +160,7 @@ class History extends React.Component{
                         </tbody>
                     </table>
                 </div>
-
             </div>
-
         )
     }
 }

@@ -9,51 +9,35 @@ class MostGoals extends React.Component{
         scorerData: [],
         top3: [],
         leagueData: [],
-        leagueName: 'none',
+        change: 'none',
         leagueId: '',
         table: [],
         loadingData: false
     }
 
 
-    leagueNameChanged = (event) => {
-        let id;
-        let tempArr=[]
-        if(event.target.value===("English"))
-        {
-            id=1
-        }
-        else if(event.target.value===("Spanish"))
-        {
-            id=2
-        }
-        else {
-            id=3
-        }
-        this.setState({
-            leagueName: event.target.value,
-            leagueId:id,
-            // scorerData:tempArr
-        });
-        this.topThree(id)
-    }
 
     topThree = (id) => {
-        this.getTopScorerData(id);
+        this.getTopScorerData(this.props.id);
         let slicedArray = []
+        if(this.props.id === 1 || this.props.id === 2 || this.props.id === 3)
+        {
+            this.setState({
+                change: 1
+            })
+        }
         setTimeout(()=>{
             slicedArray = this.state.scorerData.slice(0,3)
-            console.log(slicedArray)
             this.setState({
                 top3: slicedArray,
-                loadingData: false
+                loadingData: false,
             })
         },10*80)
     }
 
     getTopScorerData = (leaguesId) => {
         let tempArray = []
-        axios.get("https://app.seker.live/fm1/teams/"+leaguesId)
+        axios.get("https://app.seker.live/fm1/teams/"+this.props.id)
             .then((response) => {
                 response.data.map((team) => {
                     axios.get("https://app.seker.live/fm1/squad/" + leaguesId + "/" + team.id)
@@ -90,27 +74,14 @@ class MostGoals extends React.Component{
             })
     }
 
-    getLeagueData = () => {
-        axios.get("https://app.seker.live/fm1/leagues")
-            .then((response) => {
-                let leagueTemp=[]
-                response.data.map((item) => {
-                    leagueTemp.push(item.name)
-                })
-                this.setState({
-                    leagueData: leagueTemp
-                })
-            });
-    }
-
-    componentDidMount() {
-        this.getLeagueData();
-        this.topThree();
-        this.getTopScorerData()
+    buttonClicked=()=>{
+        this.topThree(this.props.id);
+        this.getTopScorerData(this.props.id)
         this.setState({
             loadingData: true
         })
     }
+
 
     render() {
         return(
@@ -121,19 +92,10 @@ class MostGoals extends React.Component{
                         :
                         <div>
                             <br/>
-                            League:
-                            <br/>
-                            <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
-                                <option value={"none"} disabled={true}>SELECT LEAGUE</option>
-                                {
-                                    this.state.leagueData.map((item) => {
-                                        return (
-                                            <option value={item}>{item}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                            {this.state.leagueName !== "none" &&
+                            <div>
+                                <button onClick={this.buttonClicked} disabled={this.props.league ==="none"}>Refresh</button>
+                            </div>
+                            {this.state.change !== "none" &&
                                 <div>
                                     <br/>
                                     <br/>

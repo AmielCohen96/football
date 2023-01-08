@@ -3,9 +3,7 @@ import axios from "axios";
 import './App.css';
 import History from "./History"
 import mostGoals from "./MostGoals";
-import {includes} from "react-table/src/filterTypes";
-import {render} from "@testing-library/react";
-
+import App from "./App";
 
 
 class Table extends React.Component{
@@ -31,46 +29,6 @@ class Table extends React.Component{
     teams_temp = []
     goal_count_temp = 0
 
-    leagueNameChanged = (event) => {
-        let id;
-        if(event.target.value===("English"))
-        {
-            id=1
-        }
-        else if(event.target.value===("Spanish"))
-        {
-            id=2
-        }
-        else {
-            id=3
-        }
-        this.setState({
-            leagueName: event.target.value,
-            leagueId:id
-        });
-        this.getTeamData(id)
-
-    }
-
-    // leagueIdChange=()=>{
-    //     let id=0
-    //         for (let i=0;i<3;i++)
-    //         {
-    //             if (this.state.leagueName===this.state.leagueData[i]) {
-    //                 id = this.state.leaguesId[i]
-    //                 break
-    //             }
-    //         }
-    //     this.setState({
-    //         leagueId : id
-    //     })
-    //
-    //
-    //
-    // }
-
-
-
 
     createObject = async (teamsData) => {
         let tempArray = [];
@@ -82,7 +40,7 @@ class Table extends React.Component{
             let totalGoals = 0
             let points = 0
             // alert(teamId)
-            axios.get("https://app.seker.live/fm1/history/"+this.state.leagueId+"/"+teamId)
+            axios.get("https://app.seker.live/fm1/history/"+this.props.id+"/"+teamId)
                 .then((response) => {
                     response.data.map((history) => {
                         let goalsFor = 0
@@ -102,7 +60,6 @@ class Table extends React.Component{
                                 totalGoals = totalGoals - 1
                                 goalAgainst = goalAgainst + 1
                             }
-                            // console.log(teamName + ' Goals: ' + totalGoals)
                         })
                         if(goalAgainst === goalsFor){
                             points = points + 1
@@ -137,32 +94,19 @@ class Table extends React.Component{
         })
     }
 
-    getTeamData =  (id) => {
-            axios.get("https://app.seker.live/fm1/teams/"+id )
+    getTeamData = () => {
+            axios.get("https://app.seker.live/fm1/teams/"+this.props.id )
                 .then((response) => {
-                    this.createObject(response.data)
+                    return(this.createObject(response.data))
                 })
     }
 
-    getLeagueData = () => {
-        axios.get("https://app.seker.live/fm1/leagues")
-            .then((response) => {
-                let leaguesTemp=[]
-                response.data.map((item) => {
-                    let leagues=item.name
-                    leaguesTemp.push(leagues)
-                })
-                this.setState({
-                    leagueData: leaguesTemp,
-                })
-            });
-    }
+
 
     dataOnClicked=(teamsId)=>{
         let tempPlayerArr = []
         let id=1
-        axios.get("https://app.seker.live/fm1/squad/" + this.state.leagueId + "/" + teamsId)
-
+        axios.get("https://app.seker.live/fm1/squad/" + this.props.id + "/" + teamsId)
             .then((response)=>
             {
                 response.data.map((item) => {
@@ -178,7 +122,7 @@ class Table extends React.Component{
 
     getHistoryData = (id,teamId) => {
         let tempArray = [];
-            axios.get("https://app.seker.live/fm1/history/"+id +"/" + teamId)
+            axios.get("https://app.seker.live/fm1/history/"+ this.props.id +"/" + teamId)
                 .then((response) => {
                     response.data.map((item) => {
                             let home1 = ''
@@ -206,26 +150,22 @@ class Table extends React.Component{
                 })
     }
 
-    componentDidMount() {
-        this.getLeagueData();
+    buttonClicked=()=>{
+        this.getTeamData()
     }
+
+
 
     render() {
         return(
             <div className="TB">
-
-                <select value={this.state.leagueName}  onChange={this.leagueNameChanged} >
-                    <option value={"none"} disabled={true}>SELECT LEAGUE</option>
-                    {
-                        this.state.leagueData.map((item) => {
-                            return (
-                                <option value={item}>{item}</option>
-                            )
-                        })
-                    }
-                </select>
-                {this.state.leagueName!=="none"&&
+                {this.props.league !=="none"&&
                     <div>
+                        <br/>
+                        <div>
+                            <button onClick={this.buttonClicked} disabled={this.props.league ==="none"}>Refresh</button>
+                        </div>
+                        <br/>
                         <table width="60%" border="2" bgcolor={"white"}>
                             <thead>
                             <tr>
@@ -242,9 +182,7 @@ class Table extends React.Component{
                                         className={index === 0 ? 'firsRow' : index >
                                         this.state.teamsData.length - 4 ? 'lastThreeRows' : ''}
                                     >
-
                                         <td style={{color:"black"}}>{index+1}</td>
-
                                         <td style={{color:"black"}} onClick={ ()=>{
                                             this.dataOnClicked(item.teamsId)
                                             this.getHistoryData(this.state.leagueId,item.teamsId)
@@ -252,7 +190,6 @@ class Table extends React.Component{
                                                 display:true
                                             })
                                         }
-
                                         }>{item.name}</td>
                                         <td style={{color:"black"}}>{item.goals}</td>
                                         <td style={{color:"black"}}>{item.points}</td>
@@ -261,40 +198,30 @@ class Table extends React.Component{
                             })
                             }
                             </tbody>
-
                         </table>
                         <div style={{backgroundColor:'whitesmoke'}}>
                             <ul>
                                 {this.state.display && <label>squad:</label>}
                                 {this.state.playerArray.map(item =>(
                                     <li>
-
                                         {item.fName + " " + item.lName}
-
                                     </li>
-
                                 ))}
                             </ul>
-
                         </div>
                         <div style={{backgroundColor:'whitesmoke'}}>
-
                             <ul>
                                 {this.state.display &&<label>history:</label>}
                                 {this.state.scoreData.map(item =>(
                                     <li>
                                         {item.homeTeam + " " + item.homeScore + "- " +item.awayScore + " " +item.awayTeam }
                                     </li>
-
                                 ))}
                             </ul>
-
                         </div>
                     </div>
                 }
-
             </div>
-
         )
     }
 }

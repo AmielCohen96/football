@@ -21,25 +21,6 @@ class Stats extends React.Component{
         highRoundName: null
     }
 
-    leagueNameChanged = (event) => {
-        let id;
-        if(event.target.value===("English"))
-        {
-            id=1
-        }
-        else if(event.target.value===("Spanish"))
-        {
-            id=2
-        }
-        else {
-            id=3
-        }
-        this.setState({
-            leagueName: event.target.value,
-            leagueId:id
-        });
-        this.getData(id)
-    }
 
     firstOrSecond = (data) => {
         let first = 0
@@ -59,6 +40,7 @@ class Stats extends React.Component{
             secondHalfGoals: second
         })
     }
+
 
     firstGoal = (data) => {
         let fastest = 100
@@ -88,6 +70,7 @@ class Stats extends React.Component{
         })
     }
 
+
     fewestGoalsRound = (data) => {
         let fewRound = 1000
         let currentRound = 1
@@ -106,7 +89,6 @@ class Stats extends React.Component{
                 goalCounter = 1
                 currentRound = currentRound + 1
             }
-            console.log(goalCounter)
         })
         this.setState({
             lowRound: fewRound,
@@ -132,7 +114,6 @@ class Stats extends React.Component{
                 goalCounter = 1
                 currentRound = currentRound + 1
             }
-            console.log(goalCounter)
         })
         this.setState({
             highRound: mostRound,
@@ -140,8 +121,8 @@ class Stats extends React.Component{
         })
     }
 
-    getData = (id) => {
-        axios.get("https://app.seker.live/fm1/history/"+id)
+    getData = () => {
+        axios.get("https://app.seker.live/fm1/history/"+this.props.id)
             .then((response) => {
                 this.firstOrSecond(response.data);
                 this.firstGoal(response.data);
@@ -151,21 +132,11 @@ class Stats extends React.Component{
             })
     }
 
-    getLeagueData = () => {
-        axios.get("https://app.seker.live/fm1/leagues")
-            .then((response) => {
-                let leagueTemp=[]
-                response.data.map((item) => {
-                    leagueTemp.push(item.name)
-                })
-                this.setState({
-                    leagueData: leagueTemp
-                })
-            });
+    buttonClicked=()=>{
+        this.getData()
     }
 
     componentDidMount() {
-        this.getLeagueData();
         this.getData();
     }
 
@@ -175,19 +146,10 @@ class Stats extends React.Component{
             <div className="ST">
                 <br/>
                 <br/>
-                <select value={this.state.leagueName} onChange={this.leagueNameChanged}>
-                    <option value={"none"} disabled={true}>SELECT LEAGUE</option>
-                    {
-                        this.state.leagueData.map((item) => {
-                            return (
-                                <option value={item}>{item}</option>
-                            )
-                        })
-                    }
-                </select>
-                {this.state.leagueName!=='none'&&
                     <div>
-                        <br/>
+                        <div>
+                            <button onClick={this.buttonClicked} disabled={this.props.league ==="none"}>Refresh</button>
+                        </div>
                         <br/>
                         <br/>
                         <br/>
@@ -204,14 +166,11 @@ class Stats extends React.Component{
                             <br/><br/>
                             The round with the fewest goals was round {this.state.lowRoundName}, in which {this.state.lowRound} goals were scored
                         </div>
-
                     </div>
-                }
-
             </div>
         )
     }
 }
 
 
-export default Stats
+export default Stats
